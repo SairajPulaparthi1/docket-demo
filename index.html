@@ -452,7 +452,7 @@ kbd { border-color: var(--border2); background: rgba(4,8,16,.4); }
 // so the board works on a static page with nothing uploaded anywhere.
 (function () {
   'use strict';
-  const KEY = 'docket-demo-v1';
+  const KEY = 'docket-demo-v2';
   const STATUSES = ['backlog', 'todo', 'inprogress', 'blocked', 'done'];
   const STATUS_NAMES = { backlog: 'Backlog', todo: 'To Do', inprogress: 'In Progress', blocked: 'Blocked', done: 'Done' };
   const PRIORITIES = ['highest', 'high', 'medium', 'low'];
@@ -469,64 +469,71 @@ kbd { border-color: var(--border2); background: rgba(4,8,16,.4); }
   function seed() {
     const day = 864e5, t0 = Date.now();
     const at = d => new Date(t0 + d * day).toISOString();
-    const due = d => { const x = new Date(t0 + d * day); return x.toISOString().slice(0, 10); };
+    const due = d => new Date(t0 + d * day).toISOString().slice(0, 10);
     const c = (d, text, system) => ({ id: rid(), at: at(d), text, ...(system ? { system: true } : {}) });
     const ck = (text, done) => ({ id: rid(), text, done: !!done });
+    const GAME = 'https://sairajpulaparthi1.github.io/brightside-pm-sim/';
     const T = [];
-    const add = (o) => { const n = T.length + 1; T.push(Object.assign({ key: 'DOC-' + n, title: '', type: 'task', status: 'todo', priority: 'medium', project: '', labels: [], due: '', description: '', checklist: [], links: [], comments: [], attachments: [], order: n, created: at(-20 + n), updated: at(-2), done_at: '' }, o)); };
+    const add = o => { const n = T.length + 1; T.push(Object.assign({ key: 'BPS-' + n, title: '', type: 'task', status: 'todo', priority: 'medium', project: '', labels: [], due: '', description: '', checklist: [], links: [], comments: [], attachments: [], order: n, created: at(-30 + n), updated: at(-2), done_at: '' }, o)); };
+    const done = (d, extra) => Object.assign({ status: 'done', done_at: at(d) }, extra);
 
-    add({ title: 'Pick a new hosting provider', project: 'WEB', status: 'done', priority: 'high', labels: ['infra'], done_at: at(-5), created: at(-21),
-      description: 'Compared three providers on price, uptime and support.\n\n**Decision:** go with the one that has staging environments built in.',
-      comments: [c(-12, 'Shortlisted three. Pricing within $10/month of each other.'), c(-5, 'Status: In Progress → Done', true), c(-5, 'Signed up and moved DNS. Old host cancels at month end.')] });
-    add({ title: 'Redesign the pricing page', project: 'WEB', status: 'inprogress', priority: 'high', due: due(2), labels: ['design', 'copy'],
-      description: 'The current page has **too many plans** and people email us asking which one to pick.\n\n- Cut to two plans\n- Add a comparison table\n- Plain-language feature names\n\nCopy draft is attached; search finds words inside it.',
-      checklist: [ck('Wireframes', 1), ck('Copy draft', 1), ck('Review with marketing'), ck('Ship it')],
-      links: [{ url: 'https://example.com/pricing-research', title: 'Pricing page research notes' }],
-      comments: [c(-4, 'Status: To Do → In Progress', true), c(-3, 'Wireframes approved. Going with two plans + FAQ.'), c(-1, 'Copy draft attached. Need marketing to sign off on the plan names.')],
-      attachments: [{ name: 'pricing-copy.md', size: 612, added: at(-1), searchable: true }] });
-    add({ title: 'Migrate old blog posts', project: 'WEB', status: 'blocked', priority: 'medium', labels: ['content'],
-      description: 'About 140 posts on the old CMS. Need an export before we can import them.',
-      comments: [c(-6, 'Status: To Do → Blocked', true), c(-6, 'Blocked: waiting on the old CMS vendor to send the export. Asked twice.')] });
-    add({ title: 'App crashes on login on Android 14', project: 'APP', type: 'bug', status: 'todo', priority: 'highest', due: due(-1), labels: ['android', 'crash'],
-      description: 'Reported by 12 users since the last release. Crash log attached. It happens right after the login button is tapped.',
-      comments: [c(-2, 'Repro on a Pixel 8. Looks like a null token on cold start.')],
-      attachments: [{ name: 'crash-log.txt', size: 840, added: at(-2), searchable: true }] });
-    add({ title: 'Add dark mode', project: 'APP', status: 'todo', priority: 'medium', due: due(9), labels: ['ui'],
-      description: 'Most requested feature in the last survey (38% of answers).',
-      checklist: [ck('Pick the color tokens'), ck('Update all screens'), ck('Follow the system setting')] });
-    add({ title: 'Offline mode for notes', project: 'APP', status: 'backlog', priority: 'low', labels: ['sync'],
-      description: 'Let people read and edit notes without a connection, then sync when back online.' });
-    add({ title: 'Finish SQL course (modules 4–6)', project: 'LEARN', status: 'inprogress', priority: 'medium', due: due(6), labels: ['course'],
-      checklist: [ck('Module 4: joins', 1), ck('Module 5: window functions'), ck('Module 6: indexes')],
-      comments: [c(-1, 'Joins finally clicked after drawing them as Venn diagrams.')] });
-    add({ title: 'Renew passport', project: 'HOME', status: 'todo', priority: 'high', due: due(12), labels: ['admin'],
-      checklist: [ck('New photo'), ck('Fill in the form'), ck('Book an appointment')],
-      comments: [c(-3, 'Expires in 4 months. Some countries need 6 months left, so do it now.')] });
-    add({ title: 'Book a dentist appointment', project: 'HOME', status: 'todo', priority: 'low', due: due(3) });
-    add({ title: 'Fix the leaky kitchen tap', project: 'HOME', status: 'done', priority: 'medium', done_at: at(-2),
-      comments: [c(-2, 'Status: To Do → Done', true), c(-2, 'Replaced the washer. $4 and 20 minutes.')] });
-    add({ title: 'Set up uptime monitoring', project: 'WEB', status: 'backlog', priority: 'medium', labels: ['infra'],
-      description: 'Get an alert within a minute if the site goes down, instead of hearing it from customers.' });
-    add({ title: 'git: undo the last commit but keep the changes', project: 'LEARN', type: 'reference', status: 'todo', labels: ['git', 'command'],
-      description: '```\ngit reset --soft HEAD~1\n```\nThe changes stay staged. Use `--mixed` to unstage them too.' });
-    add({ title: 'Launch checklist template', project: 'WEB', type: 'note', status: 'todo', labels: ['template'],
-      description: '- [ ] Scope frozen, testing done\n- [ ] Support briefed with an FAQ\n- [ ] Release to a small group first\n- [ ] Release notes published\n- [ ] Watch errors and tickets for 48 hours' });
-    add({ title: 'Home-screen widget showing today\'s tasks', project: 'APP', type: 'idea', status: 'backlog', labels: ['widget'],
-      description: 'A small widget with the next three tasks due. Tap to open the app at that task.' });
-    add({ title: 'Keyboard shortcuts I always forget', project: 'LEARN', type: 'reference', status: 'todo', labels: ['shortcuts'],
-      description: '- **⌘⇧4, then Space**: screenshot a single window\n- **⌘⌥Esc**: force quit\n- **⌃⌘Space**: emoji picker' });
+    add(done(-14, { title: 'Week 1: the churn crisis', project: 'GAME', priority: 'high', labels: ['week-1', 'office'], created: at(-24),
+      description: 'You join Brightside as the new PM; customers are cancelling twice as fast.\n\n- Walkable 2D office, live clock, meetings on schedule\n- Laptop apps: Calendar, Analytics, Docs, Board, Release\n- Customer interview, dashboard, RICE, sprint planning, PRD',
+      checklist: [ck('Office map + movement', 1), ck('Laptop apps', 1), ck('Five days of goals and events', 1), ck('End-of-week churn projection', 1)],
+      comments: [c(-20, 'First version was all reading. Rebuilt it as a real-time simulation: actions over reading.'), c(-14, 'Status: In Progress → Done', true), c(-14, 'Full playthrough passes with no errors.')] }));
+    add(done(-10, { title: 'Week 2: growth and fire', project: 'GAME', priority: 'high', labels: ['week-2'],
+      description: 'Retro, A/B test design, a 2 a.m. outage, blameless postmortem, pricing tiers, roadmap.\n\nNew mechanics: **write-then-compare**, fill-in-the-blank with reveal, spot-the-problem, put-in-order, timed decisions, slider simulators.',
+      comments: [c(-10, 'Status: In Progress → Done', true)] }));
+    add(done(-5, { title: 'Week 3: strategy and launch', project: 'GAME', priority: 'high', labels: ['week-3'],
+      description: 'OKRs, North Star, jobs to be done, survey bias, opportunity tree, user stories, design review, MoSCoW, bug triage, a big sales deal, live launch room.',
+      comments: [c(-5, 'Status: In Progress → Done', true), c(-5, 'Code now has a weeks registry, so Week 4+ just plugs in.')] }));
+    add(done(-8, { title: 'Autosave + save files', project: 'GAME', labels: ['saving'],
+      description: 'Autosave every 5 seconds per week. **Save file** exports JSON; **Load save file** restores it on any browser.',
+      comments: [c(-8, 'Tested: save → reload → continue lands at the same time, place and goals.')] }));
+    add(done(-4, { title: 'Home page with a week picker', project: 'GAME', labels: ['ui'],
+      description: 'Cards for each week: Not started / In progress / Completed + score. Continue, Start over, Restart day.' }));
+    add(done(-3, { title: 'Remove AI everywhere; scripted is the default', project: 'GAME', priority: 'high', labels: ['decision'],
+      description: 'Players shouldn\'t need an AI account. Interviews and CEO chats use reply choices; writing tasks use write-then-compare with a self-check.',
+      comments: [c(-3, 'Decision: no AI anywhere. Keeps it free, offline and predictable for a classroom.')] }));
+    add(done(-3, { title: 'Publish on GitHub Pages', project: 'SITE', labels: ['release'],
+      description: 'Public repo on my personal account. Pages rebuilds about a minute after each push.',
+      links: [{ url: GAME, title: 'Brightside PM Sim (live)' }, { url: 'https://github.com/SairajPulaparthi1/brightside-pm-sim', title: 'Source on GitHub' }],
+      comments: [c(-3, 'Renamed the competitor in the story to a made-up "Slotwise" before going public.')] }));
+    add({ title: 'Week 4: design the next week', project: 'GAME', status: 'inprogress', priority: 'high', due: due(5), labels: ['week-4'],
+      description: 'Candidate themes:\n- **Hiring and team health**: interview loop, 1:1s, a burned-out engineer\n- **Platform migration**: a risky rewrite and how to de-risk it\n- **International launch**: localization, a new market, regulation',
+      checklist: [ck('Pick the theme'), ck('Draft goals for all five days'), ck('One new mechanic'), ck('Full playthrough test'), ck('Push to Pages')],
+      comments: [c(-1, 'Status: To Do → In Progress', true), c(-1, 'Leaning towards hiring and team health. Nobody teaches that part of the job.')] });
+    add({ title: 'Playtest with 3 students', project: 'CONTENT', status: 'todo', priority: 'high', due: due(10), labels: ['research'],
+      description: 'Watch them play Week 1 without helping. Note where they get stuck.',
+      checklist: [ck('Recruit 3 testers'), ck('Run sessions'), ck('Write up findings')],
+      attachments: [{ name: 'playtest-script.md', size: 520, added: at(-1), searchable: true }] });
+    add({ title: 'Self-check sometimes pre-ticks the wrong rubric item', project: 'GAME', type: 'bug', status: 'todo', priority: 'medium', due: due(-1), labels: ['writing', 'scoring'],
+      description: 'The write-then-compare checklist uses keyword matching. "Thanks" anywhere ticks *Thanks the team*, even in "no thanks".',
+      attachments: [{ name: 'bug-notes.txt', size: 300, added: at(-2), searchable: true }] });
+    add({ title: 'Mobile layout for the laptop apps', project: 'GAME', status: 'blocked', priority: 'medium', labels: ['mobile', 'ui'],
+      comments: [c(-2, 'Status: To Do → Blocked', true), c(-2, 'Blocked: waiting on playtest results to see how many people play on phones.')] });
+    add({ title: 'Sound effects and nicer character art', project: 'GAME', status: 'backlog', priority: 'low', labels: ['polish'] });
+    add({ title: 'Office minimap', project: 'GAME', status: 'backlog', priority: 'low', labels: ['ui'] });
+    add({ title: 'Teacher mode: class codes + progress dashboard', project: 'CONTENT', type: 'idea', status: 'backlog', labels: ['education'],
+      description: 'Let an instructor see which skills each student has completed. Needs a small backend, so later.' });
+    add({ title: 'How to push an update to the live site', project: 'SITE', type: 'reference', status: 'todo', labels: ['git', 'command'],
+      description: '```\ngit add index.html\ngit commit -m "What changed"\ngit push\n```\nGitHub Pages rebuilds in about a minute. Hard-refresh to see it.',
+      links: [{ url: GAME, title: 'Live game' }] });
+    add({ title: 'Design rules for the sim', project: 'CONTENT', type: 'note', status: 'todo', labels: ['principles'],
+      description: '1. Assume players know **nothing**: explain each tool right before they use it.\n2. **Actions over reading**: if it can be a click, drag or decision, make it one.\n3. **No AI**: every answer can be checked without a model.\n4. Fictional companies and people only.' });
+    add({ title: 'PM skills covered so far', project: 'CONTENT', type: 'reference', status: 'todo', labels: ['curriculum'],
+      description: '- **Week 1:** stakeholders, customer interviews, segments, hypotheses, RICE, sprint planning, PRDs\n- **Week 2:** retros, A/B tests, incidents, postmortems, pricing, roadmaps\n- **Week 3:** OKRs, North Star, jobs to be done, user stories, design review, MoSCoW, triage, launches' });
 
     return {
-      board: { prefix: 'DOC', nextId: T.length + 1, projects: [
-        { key: 'WEB', name: 'Website relaunch', color: '#4c9aff', dir: '~/code/website' },
-        { key: 'APP', name: 'Mobile app', color: '#a77bf3', dir: '~/code/app' },
-        { key: 'HOME', name: 'Home & life', color: '#36b37e', dir: '' },
-        { key: 'LEARN', name: 'Learning', color: '#f5a524', dir: '' },
+      board: { prefix: 'BPS', nextId: T.length + 1, projects: [
+        { key: 'GAME', name: 'Brightside PM Sim: game', color: '#f0a43a', dir: '~/code/brightside-pm-sim' },
+        { key: 'CONTENT', name: 'Lessons & playtesting', color: '#a77bf3', dir: '' },
+        { key: 'SITE', name: 'Website & releases', color: '#4c9aff', dir: '~/code/brightside-pm-sim' },
       ] },
       tickets: T,
       files: {
-        'DOC-2': { 'pricing-copy.md': { text: '# Pricing page copy (draft)\n\n## Starter, $9/month\nFor individuals. Unlimited notes, sync on two devices.\n\n## Team, $19/month per person\nShared boards, comments, and admin controls.\n\n## FAQ\n**Can I switch plans later?** Yes, any time. You only pay the difference.\n**Is there a free trial?** 14 days, no credit card needed.\n' } },
-        'DOC-4': { 'crash-log.txt': { text: 'FATAL EXCEPTION: main\nProcess: com.example.notes, PID: 21844\njava.lang.NullPointerException: Attempt to invoke virtual method \'String AuthToken.value()\' on a null object reference\n    at com.example.notes.auth.LoginViewModel.onLoginTapped(LoginViewModel.kt:88)\n    at com.example.notes.ui.LoginScreen$1.onClick(LoginScreen.kt:41)\nDevice: Pixel 8, Android 14 (API 34)\nApp version: 3.2.0 (build 412)\n' } },
+        'BPS-9': { 'playtest-script.md': { text: '# Playtest script\n\n1. "Think out loud while you play. I won\'t help, that\'s on purpose."\n2. Let them play Week 1, Monday and Tuesday.\n3. Note every moment they hesitate more than 5 seconds.\n4. After: "What was confusing? What would you tell a friend about it?"\n\nWatch for: finding the laptop, understanding the clock, the research board drag-and-drop.\n' } },
+        'BPS-10': { 'bug-notes.txt': { text: 'Repro: Week 2 Monday, launch update. Write "no thanks needed, the fix worked".\nExpected: "Thanks the people who did the work" unticked.\nActual: pre-ticked, because the regex matches "thank".\nIdea: require a name or "team" near the word.\n' } },
       },
     };
   }

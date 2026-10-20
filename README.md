@@ -2,7 +2,9 @@
 
 **A personal, local-first ticket board. Jira's structure, a to-do app's simplicity, and your files stay on your machine.**
 
-**[Try the live demo →](https://sairajpulaparthi1.github.io/docket-demo/)** (sample data, saved only in your browser)
+**[Try the live demo →](https://sairajpulaparthi1.github.io/docket-demo/)** (saved only in your browser)
+
+The demo board is a real example: how I track my other project, **[Brightside PM Sim](https://sairajpulaparthi1.github.io/brightside-pm-sim/)**, a game that teaches product management. Shipped weeks are in Done, Week 4 is in progress, and there's a bug, a playtest plan, ideas, and reference notes like "how to push an update".
 
 ## The idea
 
@@ -18,7 +20,7 @@ Most to-do apps are too thin for real work, and team tools like Jira are too hea
 
 ## About this demo
 
-The desktop app is a tiny local Node server plus a single-page UI. This demo is that same UI running entirely in your browser, with the server swapped for an in-page stand-in and seeded with made-up tickets. Your changes are kept in your browser's storage; **Reset** (bottom left) restores the sample data.
+The desktop app is a tiny local Node server plus a single-page UI. This demo is that same UI running entirely in your browser, with the server swapped for an in-page stand-in and seeded with that example board. Your changes are kept in your browser's storage; **Reset** (bottom left) restores the sample data.
 
 Not available in the demo: opening files in Finder, backups to disk, and actually launching Claude Code (you can still preview and copy the brief).
 
