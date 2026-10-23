@@ -10,7 +10,8 @@ The demo board is a real example: how I track my other project, **[Brightside PM
 
 Most to-do apps are too thin for real work, and team tools like Jira are too heavy for one person. Docket sits in between:
 
-- **A real board.** Backlog → To Do → In Progress → Blocked → Done, with projects, priorities, labels and due dates. Drag cards between columns.
+- **A Today page.** A greeting, how much you finished this week, and three lists: what needs your call, what is in progress, and what is up next. Tick the box to finish a ticket.
+- **A real board.** Backlog → To Do → In Progress → Waiting for Review → Blocked → Done, with projects, priorities, labels and due dates. Drag cards between columns.
 - **Tickets that hold the whole story.** Markdown descriptions, checklists, links, timestamped notes, an activity log, and attached files (drag-drop or paste a screenshot).
 - **Search that reads your files.** ⌘K searches titles, notes, labels *and the text inside attached logs, Markdown, code, PDFs and Word documents*.
 - **A library, not just a board.** Notes, references and ideas (commands, how-tos, snippets) live next to your tickets.
@@ -24,4 +25,4 @@ The desktop app is a tiny local Node server plus a single-page UI. This demo is 
 
 Not available in the demo: opening files in Finder, backups to disk, and actually launching Claude Code (you can still preview and copy the brief).
 
-Keyboard: `C` create · `⌘K` or `/` search · `1`–`4` switch views · `Esc` close.
+Keyboard: `C` create · `⌘K` or `/` search · `1`–`5` switch views (Today, Board, List, Library, Files) · `Esc` close.
